@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { submit_to_gc } from '../api/api';
 
 const CsvVisualizer = () => {
   const [contactData, setContactData] = useState({
@@ -141,21 +142,8 @@ const CsvVisualizer = () => {
     
     try {
       // Submit the contact data to the API
-      const response = await fetch('/submit_contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(contactData)
-      });
+      const response = await submit_to_gc(contactData);
       
-      if (response.ok) {
-        alert('Contact information submitted successfully!');
-        navigate('/');
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to submit contact information');
-      }
     } catch (error) {
       console.error('Error submitting contact:', error);
       alert(`An error occurred: ${error.message}`);
